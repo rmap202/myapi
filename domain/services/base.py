@@ -1,10 +1,9 @@
 
-class BaseService:
+class BasicService():
 
-    def __init__(self, name, entity, model):
-        self.name = name
+    def __init__(self, name, entity):
         self.entity = entity
-        self.model = model
+        self.name = name
 
     def getById(self, id):
         e = self.entity.get(self.entity.id == id)

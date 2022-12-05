@@ -1,10 +1,11 @@
-from fastapi import APIRouter
+from typing import Generic, TypeVar
+from fastapi import APIRouter, Request, Depends
+
 from domain.models.user import UserModel
 
-from domain.services.base import BaseService
 
 """
-    Base Router is very basic and just create a name and a router.
+    Base Router is very basic and just create a name and router.
 """
 class BaseRouter():
     def __init__(self, name):
@@ -12,35 +13,30 @@ class BaseRouter():
         self.router = APIRouter(tags=[self.name])
 
 """
-    Basic Router inherit's BaseRouter, it's added functionality is that it handles getting, updating, and deleting
-    with any type of entity.
+    Handles CRUD methods.
 """
+
 class BasicRouter(BaseRouter):
-
-    model = None
-
-    def __init__(self, name, entity, model):    
+    def __init__(self, name, model, service):    
         super().__init__(name)
-
-        self.service = BaseService(name, entity, model)
-        self.entity = entity
-        self.model = model
-
-        # register routes
+        self._model = model
+        self.service = service
+        
+        # register base routes
         self.router.add_api_route(f"/{self.name}/Get", self.get, methods=["GET"])        
         self.router.add_api_route(f"/{self.name}/Add", self.add, methods=["POST"])
         self.router.add_api_route(f"/{self.name}/Update", self.update, methods=["PUT"])
         self.router.add_api_route(f"/{self.name}/Delete", self.delete, methods=["DELETE"])
 
-    async def get(self):
+    async def get(self, id):
         return self.service.getById(id)
 
-    ## TODO: Override with Model
-    async def add(self, item : model):
-        return item.__dict__
-
-    async def update(self):
-        pass
+    # TODO: Inherit model and use as a parameter type to avoid constatnly overriding.
+    async def add(self, model: object):
+        return self.service.add(model)
     
-    async def delete(self):
-        pass
+    async def update(self, model: object):
+        return self.service.update(model)
+
+    async def delete(self, model: object):
+        return self.service.delete(model)
