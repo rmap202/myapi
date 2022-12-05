@@ -36,7 +36,7 @@ def startup() -> FastAPI:
     app = FastAPI()
 
     # Initialise our database
-    # db.db_init()
+    db.db_init()
 
     # Mapping all API routes
     app.include_router(router_api, prefix=API_PREFIX)

@@ -10,6 +10,8 @@ def db_init():
     db = SqliteDatabase('db.db')
 
     db.connect()
-    db.create_tables([User])
-
-    admin = User.create(username="admin")
+    try:
+        db.create_tables([User])
+        User.create(username="admin")
+    except Exception as e:
+        pass
