@@ -18,3 +18,5 @@ Then launch the server - make sure your in the directory `../myapi/`:
 ```
 uvicorn main:app --reload
 ```
+
+Then go to `http:localhost:8000/docs`
