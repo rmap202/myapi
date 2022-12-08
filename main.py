@@ -10,6 +10,8 @@ from starlette.datastructures import CommaSeparatedStrings, Secret
 
 from data import db
 
+
+
 ###
 # Properties configurations
 ###
@@ -28,6 +30,8 @@ ALLOWED_HOSTS: List[str] = config(
     default = "",
 )
 
+def run_tests():
+    pass
 
 # Configure, start and returns the application
 def startup() -> FastAPI:

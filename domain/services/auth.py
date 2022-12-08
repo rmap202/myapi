@@ -3,8 +3,9 @@ import jwt
 from peewee import *
 
 from data.entities.user import User
-from domain.models.response import ResponseModel
-from domain.models.user import UserModel
+from domain.models.register import RegisterModelClient
+
+from domain.crypto import hash_str
 
 # TODO: Move to .env
 my_secret = 'my_super_secret'
@@ -17,7 +18,7 @@ def create_jwt_token(payload_data) -> str:
     )
     return token
 
-def register(user : UserModel) -> bool:
+def register(user : RegisterModelClient):
     # check if user model is valid
     
     # check if user in db  
@@ -28,11 +29,12 @@ def register(user : UserModel) -> bool:
     # create new user
     db = SqliteDatabase('db.db')
     db.connect()
-    User.create(username = user.username)
+    User.create(username = user.username, password=hash_str(user.password))
 
     
     # create jwt
+    token = create_jwt_token({"username": user.username})
     
     # send back jwt
-    return True
+    return token
     
